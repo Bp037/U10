@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>U10-V5 Mission Compiler</title>
+</head>
+<body>
+  <h2>U10-V5 Mission Compiler</h2>
+  <input type="file" id="file" />
+  <button onclick="compile()">Compile Mission</button>
+
+  <script>
+    async function compile() {
+      const file = document.getElementById("file").files[0];
+      const form = new FormData();
+      form.append("file", file);
+
+      const res = await fetch("/compile", { method: "POST", body: form });
+      const blob = await res.blob();
+
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "U10-V5_Mission.zip";
+      a.click();
+    }
+  </script>
+</body>
+</html>

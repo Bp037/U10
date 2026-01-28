@@ -1,14 +1,14 @@
 # Methane Mission Compiler (DJI Pilot 2 / M350)
 
 Private, web-based mission compiler for DJI Pilot 2 optimized for a methane
-TDLAS sensor (U10-V5). The compiler ingests a KML/KMZ LineString or Polygon,
+TDLAS sensor (U10-V5). The compiler ingests a KML/KMZ LineString centerline,
 builds methane-aware flight lines, and outputs a DJI-compatible WPML mission.
 
 ## Features (MVP)
 
 - FastAPI backend with `/compile` endpoint
 - Simple HTML upload/download frontend (no auth)
-- KML or KMZ parsing (LineString or Polygon)
+- KML or KMZ parsing (LineString centerline)
 - Methane sensor physics locked to provided constants
 - Output ZIP with:
   - `mission.wpml`
@@ -18,7 +18,7 @@ builds methane-aware flight lines, and outputs a DJI-compatible WPML mission.
 
 ```bash
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
 Open `http://localhost:8000` and upload a KML/KMZ file.
@@ -34,7 +34,7 @@ curl -X POST \
 
 ## Notes
 
-- Flight lines are designed using worst-case AGL (95 m) for coverage spacing.
+- Flight lines use worst-case AGL footprint spacing (95 m).
+- MVP generates three lines (left, center, right) from the centerline.
 - Turns are considered non-data zones.
-- Pilot 2 toggles (terrain follow, obstacle avoidance) are left to the pilot.
 - WPML output is intentionally minimal to maximize DJI Pilot 2 import success.
